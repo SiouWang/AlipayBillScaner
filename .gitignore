@@ -24,3 +24,5 @@ hs_err_pid*
 .idea/compiler.xml
 AlipayBillScaner.iml
 target/classes/image/zfb.png
+.idea/workspace.xml
+.idea/vcs.xml
