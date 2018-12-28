@@ -28,7 +28,7 @@ public class Tess4jUtils {
         //Set the tessdata path
         instance.setDatapath(tessDataFolder.getAbsolutePath());
         // 语言代码参考：https://iso639-3.sil.org/code_tables/639/data
-        instance.setLanguage(Const.ENG);
+        instance.setLanguage("chi_sim");
         return getOCRText(instance, imageFile);
     }
 
@@ -69,7 +69,7 @@ public class Tess4jUtils {
         System.out.println(readChar(path));*/
 
         String ch = "src/main/resources/image/zfb.png";
-        System.out.println(readChar(ch, "src/main/resources",  Const.CHI_SIM));
+        System.out.println(readChar(ch, "src/main/resources",  "chi_sim"));
     }
 
 }

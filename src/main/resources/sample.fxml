@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.TilePane?>
+<Pane fx:id="rootLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="qyw.controller.Controller">
+   <children>
+      <TilePane prefHeight="600.0" prefWidth="800.0">
+         <children>
+            <MenuBar prefHeight="25.0" prefWidth="800.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="文件">
+                  <items>
+                    <MenuItem fx:id="selectImgBtn" mnemonicParsing="false" onAction="#chooseImagesFromExplorer" text="打开图片" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </children>
+      </TilePane>
+      <Pane layoutX="-1.0" layoutY="25.0" prefHeight="375.0" prefWidth="800.0">
+         <children>
+            <ImageView fx:id="imgShow" fitHeight="565.0" fitWidth="314.0" layoutX="3.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </Pane>
+   </children>
+</Pane>
