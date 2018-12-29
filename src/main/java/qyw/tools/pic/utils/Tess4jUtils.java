@@ -68,8 +68,12 @@ public class Tess4jUtils {
         /*String path = "src/main/resources/image/text.png";
         System.out.println(readChar(path));*/
 
-        String ch = "src/main/resources/image/zfb.png";
-        System.out.println(readChar(ch, "src/main/resources",  "chi_sim"));
+        String imagePath = "src/main/resources/image/0.jpg";
+        String text = readChar(imagePath, "src/main/resources/tessdata",  "chi_sim");
+        String [] textArray = text.split("\n");
+        for(int i = 0 ; i < textArray.length ; i++) {
+            System.out.println("第" + (i + 1) + "行：" + textArray[i]);
+        }
     }
 
 }

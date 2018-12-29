@@ -12,7 +12,6 @@ public class Main extends Application {
         primaryStage.setTitle("支付宝账单解析");
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-//        scene.getStylesheets().add(getClass().getResource("MainStyle.css").toExternalForm());
         primaryStage.show();
     }
 
