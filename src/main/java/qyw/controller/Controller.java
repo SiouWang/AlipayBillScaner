@@ -6,16 +6,30 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import qyw.Transfer;
+import qyw.process.TempMain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements Initializable {
+
+    /**
+     * 用户选择的图片列表，缓存下来方便记录操作失败
+     */
+    private Map<String, String> processImageList = new HashMap<String, String>();
+
+    /**
+     * 处理失败的图片集合
+     */
+    private List<String> processingFailedPictureList = new ArrayList<String>();
+
+
 
     @FXML
     private Pane rootLayout;
@@ -32,8 +46,18 @@ public class Controller implements Initializable {
     @FXML
     private ImageView imgShow;
 
+    @FXML
+    private Text productName;
+
+    @FXML
+    private Text orderNo;
+
+    @FXML
+    private Text createDate;
+
 
     public void chooseImagesFromExplorer() throws FileNotFoundException, InterruptedException {
+
         System.out.println("1212312");
 
         Stage stage = (Stage) rootLayout.getScene().getWindow();
@@ -55,13 +79,19 @@ public class Controller implements Initializable {
         // 显示文件选择窗体
         List<File> fileList = fileChooser.showOpenMultipleDialog(stage);
         if(null != fileList && fileList.size() > 0) {
+            // 每次操作前，清空数据
+            processImageList.clear();
+
             for(int i = 0 ; i < fileList.size() ; i++) {
                 File file = fileList.get(i);
                 if(null != file) {
                     System.out.println("选择的文件是：" + file.getAbsolutePath());
                     Image image =  new Image("file:" + file.getAbsolutePath());
                     imgShow.setImage(image);
-                    Thread.sleep(2000);
+                    Transfer transfer = TempMain.doProcess(file.getAbsolutePath());
+                    productName.setText(transfer.getProductName());
+//                    orderNo.setText(transfer.getOrderNo());
+//                    createDate.setText(transfer.getCreateDate());
                 }
             }
         }
@@ -82,4 +112,6 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
+
 }
