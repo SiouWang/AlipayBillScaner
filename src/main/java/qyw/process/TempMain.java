@@ -114,6 +114,75 @@ public class TempMain {
         return transfer;
     }
 
+//    public static String parsingText(String imgPath) {
+//
+//        Mat src = Imgcodecs.imread(imgPath);
+//
+//        // 保存识别完毕的 图片
+//        Set<String> set = new HashSet<String>();
+//        List<String> textList = new ArrayList<String>();
+//
+//
+//        // 灰度处理
+//        Mat srcGray = new Mat();
+//        Imgproc.cvtColor(src, srcGray,Imgproc.COLOR_BGR2GRAY);
+//
+//        // 二值化处理
+//        Mat binary = new Mat();
+//        Imgproc.adaptiveThreshold(srcGray, binary, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 25, 10);
+//
+//        // 膨胀处理(这里设置size的宽的数值比较大，目的是为了让两列的图像膨胀为一列，但是不同内容区域的长度可能会导致膨胀过宽，超过了图片的宽度，导致后续的边缘检测无法探测到边缘，导致这一行的数据无法被识别)
+//        Mat dilate=new Mat();
+//        Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(90, 10));
+//        Imgproc.dilate(binary, dilate, element, new Point(-1, -1), 1);
+//
+//
+//
+//        // 边缘检测
+//        Mat cannyOutput = new Mat();
+//        Imgproc.Canny(dilate, cannyOutput, 1, 1 * 1, 3, false);
+//
+//        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+//        Mat hierarchy = new Mat();
+//        Imgproc.findContours(cannyOutput, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+//
+//        // 绘制边缘
+//        MatOfPoint2f[] contoursPoly  = new MatOfPoint2f[contours.size()];
+//        Rect[] boundRect = new Rect[contours.size()];
+//        for (int i = 0; i < contours.size(); i++) {
+//            contoursPoly[i] = new MatOfPoint2f();
+//            Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 3, true);
+//            boundRect[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
+//
+//
+//        }
+//        Mat drawing = Mat.zeros(cannyOutput.size(), CvType.CV_8UC3);
+//        List<MatOfPoint> contoursPolyList = new ArrayList<MatOfPoint>(contoursPoly.length);
+//        for (MatOfPoint2f poly : contoursPoly) {
+//            contoursPolyList.add(new MatOfPoint(poly.toArray()));
+//        }
+//
+//        System.out.println("图片的宽度为：" + src.width() + " 图片的高度为：" + src.height());
+//        Random rng = new Random(12345);
+//
+//        Transfer transfer = new Transfer();
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < contours.size(); i++) {
+//            Scalar color = new Scalar(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256));
+//            // 文字识别
+//            String text = Tess4jUtils.readTextFromImage(cutImg(src, calculateWithdAndHeight(src, boundRect[i]), i), CHI_SIM);
+//
+//            TextUtil.filterBill(text, "alipay", transfer);
+//            System.out.println(text);
+//        }
+//
+//        // 处理重复字符串
+//        textList.addAll(set);
+//
+//        return text;
+//    }
+
+
     /**
      * Rect对象中的tl() 表示top-left,保存的是矩形左上角的x,y坐标
      * Rect对象中的br() 表示bottorm-right保存的是矩形右下角的x, y坐标

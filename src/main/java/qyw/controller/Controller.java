@@ -1,7 +1,7 @@
 package qyw.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,14 +10,17 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import qyw.Transfer;
+import qyw.capture.ScreenCapture;
 import qyw.process.TempMain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class Controller implements Initializable {
+public class Controller {
 
     /**
      * 用户选择的图片列表，缓存下来方便记录操作失败
@@ -88,30 +91,29 @@ public class Controller implements Initializable {
                     System.out.println("选择的文件是：" + file.getAbsolutePath());
                     Image image =  new Image("file:" + file.getAbsolutePath());
                     imgShow.setImage(image);
-                    Transfer transfer = TempMain.doProcess(file.getAbsolutePath());
-                    productName.setText(transfer.getProductName());
+//                    Transfer transfer = TempMain.doProcess(file.getAbsolutePath());
+//                    productName.setText(transfer.getProductName());
 //                    orderNo.setText(transfer.getOrderNo());
 //                    createDate.setText(transfer.getCreateDate());
+                }
+            }
+
+            // 启动截图
+            Platform.runLater(() -> new ScreenCapture().start(new Stage()));
+
+            System.out.println("截图已经启动");
+            // 循环扫描文件目录
+            while(true) {
+                System.out.println("正在扫描...");
+                File folder = new File(System.getProperty("user.home"), "snapshots");
+                String[] content = folder.list();//取得当前目录下所有文件和文件夹
+                for(String name : content){
+                    System.out.println("当前文件是：" + name);
+                    break;
                 }
             }
         }
 
     }
-
-    /**
-     * Called to initialize a controller after its root element has been
-     * completely processed.
-     *  @param location
-     * The location used to resolve relative paths for the root object, or
-     * <tt>null</tt> if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or <tt>null</tt> if
-     */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
 
 }
