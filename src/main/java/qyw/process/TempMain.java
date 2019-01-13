@@ -36,7 +36,7 @@ public class TempMain {
     public static BufferedImage cutImg(Mat src, Rect rect, int i) {
 
         Mat cutMat = new Mat(src, rect);
-//        Imgcodecs.imwrite("F:/ocr_imgs/result/cutMat-"+ i +".jpg", cutMat);
+        Imgcodecs.imwrite("F:/ocr_imgs/result/cutMat-"+ i +".jpg", cutMat);
         // 识别图像内容
         BufferedImage nameBuffer = OpencvUtil.Mat2BufImg(cutMat,".jpg");
 
@@ -45,7 +45,7 @@ public class TempMain {
 
 
 
-    public static Transfer doProcess(String imgPath) {
+    public static void doProcess(String imgPath) {
 
         Mat src = Imgcodecs.imread(imgPath);
 
@@ -64,9 +64,9 @@ public class TempMain {
 
         // 膨胀处理(这里设置size的宽的数值比较大，目的是为了让两列的图像膨胀为一列，但是不同内容区域的长度可能会导致膨胀过宽，超过了图片的宽度，导致后续的边缘检测无法探测到边缘，导致这一行的数据无法被识别)
         Mat dilate=new Mat();
-        Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(90, 10));
+        Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(90, 20));
         Imgproc.dilate(binary, dilate, element, new Point(-1, -1), 1);
-
+        Imgcodecs.imwrite("F:/ocr_imgs/result/dilate.jpg", dilate);
 
 
         // 边缘检测
@@ -75,7 +75,9 @@ public class TempMain {
 
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Mat hierarchy = new Mat();
-        Imgproc.findContours(cannyOutput, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(cannyOutput, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
+        Imgcodecs.imwrite("F:/ocr_imgs/result/cannyOutput.jpg", cannyOutput);
+
 
         // 绘制边缘
         MatOfPoint2f[] contoursPoly  = new MatOfPoint2f[contours.size()];
@@ -84,10 +86,9 @@ public class TempMain {
             contoursPoly[i] = new MatOfPoint2f();
             Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 3, true);
             boundRect[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
-
-
         }
         Mat drawing = Mat.zeros(cannyOutput.size(), CvType.CV_8UC3);
+
         List<MatOfPoint> contoursPolyList = new ArrayList<MatOfPoint>(contoursPoly.length);
         for (MatOfPoint2f poly : contoursPoly) {
             contoursPolyList.add(new MatOfPoint(poly.toArray()));
@@ -96,22 +97,29 @@ public class TempMain {
         System.out.println("图片的宽度为：" + src.width() + " 图片的高度为：" + src.height());
         Random rng = new Random(12345);
 
-        Transfer transfer = new Transfer();
-        StringBuilder sb = new StringBuilder();
+        List<String> alreadyProcList;
         for (int i = 0; i < contours.size(); i++) {
+            alreadyProcList = new ArrayList<>();
+            // xy坐标有重复的，这里做个去重
+            String xyStr = boundRect[i].tl() + "-" + boundRect[i].br();
+            if(alreadyProcList.contains(xyStr)) {
+               continue;
+            }
+            alreadyProcList.add(xyStr);
+
             Scalar color = new Scalar(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256));
             // 在原图绘制矩形边框
-//            Imgproc.rectangle(src, boundRect[i].tl(), boundRect[i].br(), color, 2);
+            Imgproc.rectangle(src, boundRect[i].tl(), boundRect[i].br(), color, 2);
             // 文字识别
             String text = Tess4jUtils.readTextFromImage(cutImg(src, calculateWithdAndHeight(src, boundRect[i]), i), CHI_SIM);
+//            System.out.println(boundRect[i].tl() + "<--->" + boundRect[i].br() + text);
+            text = text.trim();
+            if(text != "") {
+                System.out.println(text);
+            }
 
-            TextUtil.filterBill(text, "alipay", transfer);
-            System.out.println(text);
         }
-
-        // 处理重复字符串
-        textList.addAll(set);
-        return transfer;
+        Imgcodecs.imwrite("F:/ocr_imgs/result/src-rectangle.jpg", src);
     }
 
 //    public static String parsingText(String imgPath) {
@@ -206,6 +214,7 @@ public class TempMain {
         if(!hasCutPoint.contains(pointStr)) {
             hasCutPoint.add(pointStr);
         }
+//        System.out.println("x : " + cutRect.x + " y ：" + cutRect.y + " width : " + cutRect.width + " height : " + cutRect.height);
         return cutRect;
     }
 }

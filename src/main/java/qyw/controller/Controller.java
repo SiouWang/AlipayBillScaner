@@ -91,7 +91,7 @@ public class Controller {
                     System.out.println("选择的文件是：" + file.getAbsolutePath());
                     Image image =  new Image("file:" + file.getAbsolutePath());
                     imgShow.setImage(image);
-//                    Transfer transfer = TempMain.doProcess(file.getAbsolutePath());
+                    TempMain.doProcess(file.getAbsolutePath());
 //                    productName.setText(transfer.getProductName());
 //                    orderNo.setText(transfer.getOrderNo());
 //                    createDate.setText(transfer.getCreateDate());
@@ -99,19 +99,19 @@ public class Controller {
             }
 
             // 启动截图
-            Platform.runLater(() -> new ScreenCapture().start(new Stage()));
-
-            System.out.println("截图已经启动");
-            // 循环扫描文件目录
-            while(true) {
-                System.out.println("正在扫描...");
-                File folder = new File(System.getProperty("user.home"), "snapshots");
-                String[] content = folder.list();//取得当前目录下所有文件和文件夹
-                for(String name : content){
-                    System.out.println("当前文件是：" + name);
-                    break;
-                }
-            }
+//            Platform.runLater(() -> new ScreenCapture().start(new Stage()));
+//
+//            System.out.println("截图已经启动");
+//            // 循环扫描文件目录
+//            while(true) {
+//                System.out.println("正在扫描...");
+//                File folder = new File(System.getProperty("user.home"), "snapshots");
+//                String[] content = folder.list();//取得当前目录下所有文件和文件夹
+//                for(String name : content){
+//                    System.out.println("当前文件是：" + name);
+//                    break;
+//                }
+//            }
         }
 
     }
